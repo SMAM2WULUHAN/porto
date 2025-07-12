@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,19 +12,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "types": [
-      "react",
-      "react-dom"
-    ],
+    "types": ["react", "react-dom"],
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/components/*": [
-        "./app/components/*"
-      ],
-      "@/utils/*": [
-        "./utils/*"
-      ],
+      "@/components/*": ["./app/components/*"],
+      "@/utils/*": ["./utils/*"],
+      "@/data/*": ["./data/*"],        // ✅ karena data ada di root
+      "@/data": ["./data"]             // ✅ untuk akses langsung
     },
     "plugins": [
       {
@@ -41,9 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "types/globals.d.ts" // Pastikan ini mencakup file deklarasi tipe global Anda
+    "types/globals.d.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

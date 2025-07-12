@@ -73,11 +73,11 @@ export const gridItems = [
 export const projects = [
   {
     id: 1,
-    title: "Website Company Profile for School",
-    des: "Website Company Profile for School, using Bootstrap 5 and Laravel 11 for Framework. This project is hosted and online, you can click the url to see the project",
-    img: "/project1.png",
+    title: "SGTGeomedia Using Laravel11 & Bootstrap5",
+    des: "Website for geomedia company, using laravel 11 and bootstrap 5",
+    img: "/project4.png",
     iconLists: ["/laravel.svg", "/bootstrap.svg", "/html.svg"],
-    link: "https://smam2wuluhan.site/",
+    link: "https://sgtgeomedia.com/",
   },
   {
     id: 2,
@@ -95,13 +95,14 @@ export const projects = [
     iconLists: ["/re.svg", "/tail.svg", "/html.svg","/laravel.svg"],
     link: "",
   },
+  
   {
     id: 4,
-    title: "SGTGeomedia Using Laravel11 & Bootstrap5",
-    des: "Website for geomedia company, using laravel 11 and bootstrap 5",
-    img: "/project4.png",
+    title: "Website Company Profile for School",
+    des: "Website Company Profile for School, using Bootstrap 5 and Laravel 11 for Framework. This project is hosted and online, you can click the url to see the project",
+    img: "/project1.png",
     iconLists: ["/laravel.svg", "/bootstrap.svg", "/html.svg"],
-    link: "https://sgtgeomedia.com/",
+    link: "https://smam2wuluhan.site/",
   },
 ];
 
