@@ -33,7 +33,7 @@ const Footer = () => {
           className="heading lg:max-w-[45vw] text-white text-center"
         />
         <p className="text-white-200 md:mt-10 my-5 text-center">
-          Reach out to me today and let's discuss how I can help you achieve your goals.
+          {"Reach out to me today and let's discuss how I can help you achieve your goals."}
         </p>
         <a
           href="https://wa.me/6285643571298?text=Hi%20there!%20I%27m%20interested%20in%20your%20services.%20Can%20we%20discuss%20further?"
