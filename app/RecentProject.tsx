@@ -1,63 +1,163 @@
-import { projects } from '../data';
-import React from 'react';
-import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-cardeffect";
+"use client";
 
-const RecentProject = () => {
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+} from "react";
+import { cn } from "@/utils/cn";
+
+// Context to track mouse enter
+const MouseEnterContext = createContext<
+  [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
+>(undefined);
+
+// CardContainer component
+export const CardContainer = ({
+  children,
+  className,
+  containerClassName,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  containerClassName?: string;
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMouseEntered, setIsMouseEntered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const { left, top, width, height } =
+      containerRef.current.getBoundingClientRect();
+    const x = (e.clientX - left - width / 2) / 25;
+    const y = (e.clientY - top - height / 2) / 25;
+    containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+  };
+
+  const handleMouseEnter = () => {
+    setIsMouseEntered(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (!containerRef.current) return;
+    setIsMouseEntered(false);
+    containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
+  };
+
   return (
-    <div className="py-20 text-center">
-      <h1 className="text-3xl font-bold text-white">
-        A small selection of{' '}
-        <span className="text-purple">recent projects</span>
-      </h1>
-      <div className="flex flex-wrap items-center justify-center p-4 gap-16 mt-10">
-        {projects.map(({ id, title, des, img, iconLists, link }) => (
-          <CardContainer key={id} className="max-w-sm">
-            <CardBody
-              className="p-6 rounded-3xl shadow-lg group hover:shadow-xl transition duration-200"
-              style={{
-                zIndex: 10, // Pastikan elemen berada di atas
-                backgroundImage:
-                  "linear-gradient(90deg, rgba(4,7,29,1) 0%, rgba(12,14,35,1) 35%",
-                border: "2px solid #FFFFFF", // Border putih
-                boxShadow: "0 0 10px rgba(255, 255, 255, 0.5)", // Tambahkan efek shadow
-              }}
-            >
-              <CardItem translateZ={30}>
-                <img
-                  src={img}
-                  alt={title}
-                  className="w-full h-40 object-cover rounded-md"
-                />
-              </CardItem>
-              <CardItem translateZ={20}>
-                <h2 className="text-xl font-semibold text-purple mt-4">{title}</h2>
-              </CardItem>
-              <CardItem translateZ={10}>
-                <p className="text-gray-300 mt-2">{des}</p>
-              </CardItem>
-              <CardItem>
-                <div className="flex gap-2 justify-center mt-4">
-                  {iconLists.map((icon, index) => (
-                    <img key={index} src={icon} alt="icon" className="w-8 h-8" />
-                  ))}
-                </div>
-              </CardItem>
-              <CardItem>
-                <a
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-4 text-purple underline hover:text-white items-center"
-                >
-                  View Project
-                </a>
-              </CardItem>
-            </CardBody>
-          </CardContainer>
-        ))}
+    <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
+      <div
+        className={cn(
+          "py-20 flex items-center justify-center",
+          containerClassName
+        )}
+        style={{
+          perspective: "1000px",
+        }}
+      >
+        <div
+          ref={containerRef}
+          onMouseEnter={handleMouseEnter}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className={cn(
+            "flex items-center justify-center relative transition-all duration-200 ease-linear",
+            className
+          )}
+          style={{
+            transformStyle: "preserve-3d",
+          }}
+        >
+          {children}
+        </div>
       </div>
+    </MouseEnterContext.Provider>
+  );
+};
+
+// CardBody component (✅ diperbaiki)
+export const CardBody = ({
+  children,
+  className,
+  style,
+  ...rest
+}: {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}) => {
+  return (
+    <div
+      className={cn(
+        "h-96 w-96 [transform-style:preserve-3d]  [&>*]:[transform-style:preserve-3d]",
+        className
+      )}
+      style={style}
+      {...rest}
+    >
+      {children}
     </div>
   );
 };
 
-export default RecentProject;
+// CardItem component
+export const CardItem = ({
+  as: Tag = "div",
+  children,
+  className,
+  translateX = 0,
+  translateY = 0,
+  translateZ = 0,
+  rotateX = 0,
+  rotateY = 0,
+  rotateZ = 0,
+  ...rest
+}: {
+  as?: React.ElementType;
+  children: React.ReactNode;
+  className?: string;
+  translateX?: number | string;
+  translateY?: number | string;
+  translateZ?: number | string;
+  rotateX?: number | string;
+  rotateY?: number | string;
+  rotateZ?: number | string;
+  [key: string]: unknown;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isMouseEntered] = useMouseEnter();
+
+  useEffect(() => {
+    handleAnimations();
+  }, [isMouseEntered]);
+
+  const handleAnimations = () => {
+    if (!ref.current) return;
+    if (isMouseEntered) {
+      ref.current.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
+    } else {
+      ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
+    }
+  };
+
+  return (
+    <Tag
+      ref={ref}
+      className={cn("w-fit transition duration-200 ease-linear", className)}
+      {...rest}
+    >
+      {children}
+    </Tag>
+  );
+};
+
+// Custom hook to use MouseEnter context
+export const useMouseEnter = () => {
+  const context = useContext(MouseEnterContext);
+  if (context === undefined) {
+    throw new Error("useMouseEnter must be used within a MouseEnterProvider");
+  }
+  return context;
+};
